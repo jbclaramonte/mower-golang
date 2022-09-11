@@ -1,7 +1,7 @@
 package service
 
 import (
-	"mower/core/domain"
+	"github.com/jbclaramonte/mower-golang/core/domain"
 )
 
 type Command interface {

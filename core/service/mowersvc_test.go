@@ -1,9 +1,10 @@
 package service
 
 import (
-	"mower/core/domain"
 	"reflect"
 	"testing"
+
+	"github.com/jbclaramonte/mower-golang/core/domain"
 )
 
 // source: https://gist.github.com/samalba/6059502
