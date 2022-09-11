@@ -66,9 +66,7 @@ func createCommand(command string) Command {
 	} else if command == "L" {
 		return turnLeft{}
 	}
-	// panic("Unknown command" + command)
-	println("------------------------")
-	return nil
+	panic("Unknown command" + command)
 }
 
 func ApplyComand(garden domain.Garden, mower domain.Mower, command string) domain.Mower {
