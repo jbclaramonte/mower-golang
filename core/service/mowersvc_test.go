@@ -103,12 +103,12 @@ var applyCommandTestCases = []struct {
 		garden:      domain.Garden{Width: 4, Height: 4},
 		command:     "A",
 		initialState: domain.Mower{
-			X:           2,
+			X:           1,
 			Y:           2,
 			Orientation: domain.West,
 		},
 		expectedState: domain.Mower{
-			X:           1,
+			X:           0,
 			Y:           2,
 			Orientation: domain.West,
 		},
@@ -158,12 +158,27 @@ var applyCommandTestCases = []struct {
 			Orientation: domain.East,
 		},
 	},
+	{
+		description: "when mower turn left if its orientation was N then it will be W",
+		garden:      domain.Garden{Width: 4, Height: 4},
+		command:     "G",
+		initialState: domain.Mower{
+			X:           2,
+			Y:           2,
+			Orientation: domain.North,
+		},
+		expectedState: domain.Mower{
+			X:           2,
+			Y:           2,
+			Orientation: domain.West,
+		},
+	},
 }
 
 func TestService(t *testing.T) {
 	for _, testCase := range applyCommandTestCases {
 		t.Run(testCase.description, func(t *testing.T) {
-			result := ApplyComand(testCase.garden, testCase.initialState, testCase.command)
+			result := ApplyCommand(testCase.garden, testCase.initialState, testCase.command)
 
 			AssertEqual(t, result, testCase.expectedState)
 		})
@@ -175,10 +190,10 @@ func TestService(t *testing.T) {
 			if r == nil {
 				t.Errorf("The code did not panic")
 			}
-			r.
+
 		}()
 
-		ApplyComand(domain.Garden{Width: 4, Height: 4}, domain.Mower{}, "Q")
+		ApplyCommand(domain.Garden{Width: 4, Height: 4}, domain.Mower{}, "Q")
 
 	})
 }

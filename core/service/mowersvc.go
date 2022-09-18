@@ -1,7 +1,11 @@
 package service
 
 import (
+	"fmt"
+	"log"
+
 	"github.com/jbclaramonte/mower-golang/core/domain"
+	"github.com/jbclaramonte/mower-golang/core/helper"
 )
 
 type Command interface {
@@ -12,11 +16,9 @@ type forward struct {
 }
 
 func (c forward) apply(garden domain.Garden, mower domain.Mower) domain.Mower {
-	var result domain.Mower
+	result := mower
 	if mower.Orientation == domain.North {
-		if mower.Y-1 < 0 {
-			result = mower
-		} else {
+		if mower.Y-1 >= 0 {
 			result = domain.Mower{
 				X:           mower.X,
 				Y:           mower.Y - 1,
@@ -30,18 +32,14 @@ func (c forward) apply(garden domain.Garden, mower domain.Mower) domain.Mower {
 				Y:           mower.Y,
 				Orientation: mower.Orientation,
 			}
-		} else {
-			result = mower
 		}
 	} else if mower.Orientation == domain.West {
-		if mower.X-1 > 0 {
+		if mower.X-1 >= 0 {
 			result = domain.Mower{
 				X:           mower.X - 1,
 				Y:           mower.Y,
 				Orientation: mower.Orientation,
 			}
-		} else {
-			result = mower
 		}
 	} else if mower.Orientation == domain.South {
 		if mower.Y+1 < garden.Height {
@@ -50,8 +48,6 @@ func (c forward) apply(garden domain.Garden, mower domain.Mower) domain.Mower {
 				Y:           mower.Y + 1,
 				Orientation: mower.Orientation,
 			}
-		} else {
-			result = mower
 		}
 	}
 
@@ -63,16 +59,18 @@ func createCommand(command string) Command {
 		return forward{}
 	} else if command == "D" {
 		return turnRight{}
-	} else if command == "L" {
+	} else if command == "G" {
 		return turnLeft{}
 	}
-	panic("Unknown command" + command)
+	panic(fmt.Sprintf("Unknown command '%v'", command))
 }
 
-func ApplyComand(garden domain.Garden, mower domain.Mower, command string) domain.Mower {
+func ApplyCommand(garden domain.Garden, mower domain.Mower, command string) domain.Mower {
 	cmd := createCommand(command)
-
-	return cmd.apply(garden, mower)
+	log.Printf("will apply command %v on mower %v", command, mower)
+	mower = cmd.apply(garden, mower)
+	log.Printf("new mower status: %v", helper.PrettyJson(mower))
+	return mower
 }
 
 type turnRight struct{}

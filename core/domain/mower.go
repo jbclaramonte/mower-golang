@@ -1,5 +1,9 @@
 package domain
 
+import (
+	"fmt"
+)
+
 type Mower struct {
 	X           int
 	Y           int
@@ -11,10 +15,24 @@ type Garden struct {
 	Height int
 }
 
+func GetOrientation(orientation string) (*Orientation, error) {
+	switch orientation {
+	case "N":
+		return &North, nil
+	case "S":
+		return &South, nil
+	case "E":
+		return &East, nil
+	case "W":
+		return &West, nil
+	}
+	return nil, fmt.Errorf("no orientation for %v", orientation)
+}
+
 type Orientation struct {
 	Letter string
-	Right  *Orientation
-	Left   *Orientation
+	Right  *Orientation `json:"-"`
+	Left   *Orientation `json:"-"`
 }
 
 var North = Orientation{
@@ -41,4 +59,5 @@ func init() {
 	South.Right = &West
 	West.Left = &South
 	West.Right = &North
+	North.Left = &West
 }
