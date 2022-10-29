@@ -1,0 +1,61 @@
+openapi: "3.1.0"
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  description: A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: Swagger API Team
+    email: apiteam@swagger.io
+    url: http://swagger.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://petstore.swagger.io/api
+paths:
+  /garden:
+    post:
+      description: Creates a garden on wich the mower is going to move
+      operationId: createGarden
+      requestBody:
+        description: Garden to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Garden'
+      responses:
+        '200':
+          description: success
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+ 
+components:
+  schemas:
+    Garden:
+      type: object
+      required:
+        - width
+        - height  
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer    
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
